@@ -1,10 +1,10 @@
 export const Hero = () => (
-  <div className="bg-neutral-100 border-b py-10 md:py-20 px-4 md:px-8">
+  <div className="bg-neutral-900 py-10 md:py-20 px-4 md:px-8">
     <div className="max-w-4xl mx-auto">
-      <div className=" text-neutral-800 leading-snug">
+      <div className=" text-neutral-100 leading-snug">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold">
           Encuentra{" "}
-          <span className="md:underline transition-all delay-500 decoration-indigo-600 underline-offset-4">
+          <span className="md:underline underline-offset-8">
             marcas
           </span>{" "}
           con{" "}
@@ -17,16 +17,16 @@ export const Hero = () => (
                 Encuentra marcas con principios
               </h1>
             </div> */}
-        <div className="md:w-9/12 text-xl md:text-2xl text-neutral-500">
-          <p className="pt-8">
-            Que producen cerca de ti, que se preocupan por contaminar menos o
+        <div className="md:w-9/12 text-xl md:text-3xl text-neutral-400">
+          <p className="mt-8">
+            Marcas que producen cerca de ti, que se preocupan por contaminar menos o
             que utilizan materiales reciclados.
           </p>
-          <p className="pt-8">
+          <p className="mt-8">
             Tú decides como poner tu granito de arena para promover un consumo
             más sostenible.
           </p>
-          <p className="pt-8">Hay vida más allá de Primark, Nike o Ikea.</p>
+          <p className="mt-8">Hay vida más allá de Primark, Nike o Ikea.</p>
         </div>
       </div>
     </div>

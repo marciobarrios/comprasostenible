@@ -28,10 +28,10 @@ export const Layout = ({
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    <Header />
+    <Header isHome={isHome} />
     {isHome && <Hero />}
 
-    <main className="text-neutral-600 max-w-4xl m-auto px-4 md:px-8 py-8 md:py-16">
+    <main className="text-neutral-600 px-4 md:px-8 py-8 md:py-16 max-w-4xl m-auto">
       {children}
     </main>
   </div>
