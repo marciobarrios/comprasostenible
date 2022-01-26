@@ -8,16 +8,15 @@ import type { BrandsProps } from "../../types";
 
 export default function Type({ brands }: BrandsProps) {
   const category = brands[0].fields.type as keyof typeof CATEGORIES;
-  const categoryCapitalized = category.replace(/^\w/, (c) => c.toUpperCase());
 
   return (
     <Layout
-      title={`Marcas de ${categoryCapitalized} sostenible ~ comprasostenible.co`}
+      title={`Marcas de ${CATEGORIES[category]} sostenible ~ comprasostenible.co`}
     >
       <Title>
         Marcas de{" "}
         <span className="font-extrabold text-neutral-900">
-          {categoryCapitalized}
+          {CATEGORIES[category]}
         </span>{" "}
         sostenible
       </Title>

@@ -63,7 +63,7 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
       <Subtitle className="mb-4">Categoría</Subtitle>
 
       <Link href={`/categoria/${brand.fields.type}`}>
-        <a className="py-2 px-3 border rounded-md font-semibold text-indigo-600 hover:border-indigo-600 hover:bg-indigo-600 hover:text-neutral-50 transition-colors">
+        <a className="py-3 px-2 md:px-4 border rounded-md font-semibold text-indigo-600 hover:border-indigo-600 hover:bg-indigo-600 hover:text-neutral-50 transition-colors">
           {brand.fields.type.replace(/^\w/, (c) => c.toUpperCase())}
           <span className="hidden md:inline"> &rarr;</span>
         </a>
