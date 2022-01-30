@@ -17,12 +17,9 @@ export const Header = ({ isHome }: Props) => (
           </span>
         )}
       </a>
-      {/* <a className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-neutral-100 to-green-600">
-        Compra Sostenible
-      </a> */}
     </Link>
-    <Link href="/about">
-      <a className="text-neutral-300 text-sm">Sobre el proyecto</a>
+    <Link href="/el-proyecto">
+      <a className="text-neutral-300 text-sm">El proyecto</a>
     </Link>
   </div>
 );
