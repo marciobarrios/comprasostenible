@@ -21,6 +21,16 @@ interface Logo {
   };
 }
 
+export interface Certificate {
+  id: string;
+  fields: {
+    name: string;
+    marcas: string[];
+    url: string;
+    logo: Logo[];
+  }
+}
+
 export interface Brand {
   id: string;
 
@@ -45,6 +55,7 @@ export interface Brand {
     freeReturns?: boolean;
     highlight?: boolean;
     certificates: string[];
+    allCertificates?: Certificate[]
 
     // URLs
     url: string;

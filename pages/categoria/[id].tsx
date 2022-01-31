@@ -11,19 +11,18 @@ export default function Type({ brands }: BrandsProps) {
 
   return (
     <Layout
-      title={`Marcas de ${CATEGORIES[category]} sostenible ~ comprasostenible.co`}
+      title={`Marcas sostenibles de ${CATEGORIES[category]} ~ comprasostenible.co`}
     >
       <Title>
-        Marcas de{" "}
+        Marcas sostenibles de{" "}
         <span className="font-extrabold text-neutral-900">
           {CATEGORIES[category]}
         </span>{" "}
-        sostenible
       </Title>
 
-      <ul>
+      <ul className="xl:flex xl:flex-wrap items-start justify-between">
         {brands.map((brand) => (
-          <li key={brand.id} className="mt-8 md:mt-16 first:mt-0">
+          <li key={brand.id} className="mt-8 md:mt-16 xl:mt-0 xl:mb-16 first:mt-0 xl:w-[36rem]">
             <BrandSummary brand={brand} />
           </li>
         ))}
@@ -46,7 +45,7 @@ export const getStaticPaths: GetStaticPaths = async () => ({
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const res = await fetch(
-    `${process.env.AIRTABLE_API}&view=${params!.id}&perPage=all`
+    `${process.env.API_BRANDS}&view=${params!.id}&perPage=all`
   );
   const brands = await res.json();
 

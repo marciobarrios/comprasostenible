@@ -2,15 +2,35 @@ import Link from "next/link";
 
 import { Subtitle } from "components/title";
 
+import { wrapURLs } from "utils";
+
 import type { Brand as BrandType } from "types";
 
 import { IoLocationOutline, IoEarthOutline } from "react-icons/io5";
 import { BsBuilding, BsAward, BsShop } from "react-icons/bs";
-import { RiRecycleLine, RiMapPinLine } from "react-icons/ri";
+import {
+  RiRecycleLine,
+  RiMapPinLine,
+
+  // Social
+  RiFacebookCircleLine,
+  RiTwitterLine,
+  RiYoutubeLine,
+  RiInstagramLine,
+  RiPinterestLine,
+} from "react-icons/ri";
 import { TiLeaf } from "react-icons/ti";
 import { MdOutlineFrontHand } from "react-icons/md";
 
-const SustainabilityIcons = {
+const socialIcons = {
+  facebook: RiFacebookCircleLine,
+  twitter: RiTwitterLine,
+  youtube: RiYoutubeLine,
+  instagram: RiInstagramLine,
+  pinterest: RiPinterestLine,
+};
+
+const sustainabilityIcons = {
   "sin plástico": IoEarthOutline,
   "materiales reciclados": RiRecycleLine,
   "materiales orgánicos": TiLeaf,
@@ -34,14 +54,14 @@ const Locations = ({ location, production }: LocationsProps) => (
         size={32}
         className="hidden md:block text-neutral-400"
       />
-      <div className="ml-2">
+      <div className="md:ml-2">
         <Subtitle className="text-sm">Ubicación</Subtitle>
         {location}
       </div>
     </li>
-    <li className="md:border-l flex px-4 md:px-6 md:items-center">
+    <li className="md:border-l flex pl-4 md:pl-6 md:items-center">
       <BsBuilding size={32} className="hidden md:block text-neutral-400" />
-      <div className="ml-2">
+      <div className="md:ml-2">
         <Subtitle className="text-sm">Producción</Subtitle>
         {production.join(", ")}
       </div>
@@ -51,8 +71,8 @@ const Locations = ({ location, production }: LocationsProps) => (
 
 export const Brand = ({ brand }: { brand: BrandType }) => (
   <div className="flex items-start">
-    <div>
-      <div className="mr-4 md:mr-8 p-4 rounded-md bg-white shadow-lg border mb-10">
+    <div className="mr-4 md:mr-8">
+      <div className=" p-4 rounded-md bg-white shadow-lg border mb-10">
         <img
           alt={`logo de ${brand.fields.name}`}
           className="w-16 md:w-40 max-w-none aspect-square rounded-md object-scale-down"
@@ -68,6 +88,12 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
           <span className="hidden md:inline"> &rarr;</span>
         </a>
       </Link>
+
+      <div className="mt-16">
+        <a href="#" className="hidden md:block text-indigo-600 hover:text-stone-600 text-sm">
+          Reportar un error
+        </a>
+      </div>
     </div>
 
     <div>
@@ -82,7 +108,7 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
         {brand.fields.url}
       </a>
 
-      <p className="text-neutral-500 mt-6 mb-10 text-xl">
+      <p className="text-neutral-500 mt-6 mb-10 text-l md:text-xl">
         {brand.fields.description}
       </p>
 
@@ -91,143 +117,129 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
         production={brand.fields.production}
       />
 
-      <Subtitle className="mb-4 mt-12">Medidas sosteniblies</Subtitle>
       {brand.fields.sustainability && (
-        <ul className="flex items-stretch gap-4">
-          {brand.fields.sustainability.map((highlight) => {
-            const Icon =
-              SustainabilityIcons[
-                highlight as keyof typeof SustainabilityIcons
-              ];
+        <>
+          <Subtitle className="mt-12 mb-4">Medidas sostenibles</Subtitle>
+          <ul className="flex flex-wrap md:flex-nowrap items-stretch gap-4">
+            {brand.fields.sustainability.map((highlight) => {
+              const Icon =
+                sustainabilityIcons[
+                  highlight as keyof typeof sustainabilityIcons
+                ];
 
-            return (
-              <li
-                className="border p-3 flex flex-initial flex-col items-center rounded-lg bg-neutral-100 justify-center"
-                key={highlight}
-              >
-                <Icon size={24} className="text-green-600" />
-                <div className="mt-2 font-semibold text-neutral-800 text-center text-sm">
-                  {highlight}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+              return (
+                <li
+                  className="border p-3 flex flex-initial flex-col items-center rounded-lg bg-neutral-100 justify-center"
+                  key={highlight}
+                >
+                  <Icon size={24} className="text-green-600" />
+                  <div className="mt-2 font-semibold text-neutral-800 text-center text-sm">
+                    {highlight}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </>
       )}
 
-      <ul className="mt-12 marker:text-indigo-300">
-        {(brand.fields.faqs || brand.fields.faqs || brand.fields.blog) && (
-          <li>
-            <Subtitle>Enlaces para conocer mejor la marca</Subtitle>
-            <ul className="list-disc mt-2">
-              {brand.fields.manifest && (
-                <li>
-                  <a
-                    href={brand.fields.manifest}
-                    className="text-indigo-600 hover:text-stone-600"
-                  >
-                    Manifiesto
-                  </a>
-                </li>
-              )}
-              {brand.fields.faqs && (
-                <li className="mt-2">
-                  <a
-                    href={brand.fields.faqs}
-                    className="text-indigo-600 hover:text-stone-600"
-                  >
-                    Preguntas Frecuentes
-                  </a>
-                </li>
-              )}
-              {brand.fields.blog && (
-                <li className="mt-2">
-                  <a
-                    href={brand.fields.blog}
-                    className="text-indigo-600 hover:text-stone-600"
-                  >
-                    Blog
-                  </a>
-                </li>
-              )}
-            </ul>
-          </li>
-        )}
-      </ul>
+      {(brand.fields.faqs || brand.fields.faqs || brand.fields.blog) && (
+        <>
+          <Subtitle className="mt-12">Conoce la marca</Subtitle>
 
-      <ul className="mt-8 marker:text-indigo-300">
-        <li>
-          <Subtitle>Redes sociales</Subtitle>
-          <ul className="list-disc mt-2">
-            {brand.fields.facebook && (
+          <ul className="list-disc mt-2 marker:text-neutral-300">
+            {brand.fields.manifest && (
               <li>
                 <a
-                  href={brand.fields.facebook}
+                  href={brand.fields.manifest}
                   className="text-indigo-600 hover:text-stone-600"
                 >
-                  Facebook
+                  Manifiesto
                 </a>
               </li>
             )}
-            {brand.fields.instagram && (
-              <li>
+            {brand.fields.faqs && (
+              <li className="mt-2">
                 <a
-                  href={brand.fields.instagram}
+                  href={brand.fields.faqs}
                   className="text-indigo-600 hover:text-stone-600"
                 >
-                  Instagram
+                  Preguntas Frecuentes
                 </a>
               </li>
             )}
-            {brand.fields.pinterest && (
-              <li>
+            {brand.fields.blog && (
+              <li className="mt-2">
                 <a
-                  href={brand.fields.pinterest}
+                  href={brand.fields.blog}
                   className="text-indigo-600 hover:text-stone-600"
                 >
-                  Pinterest
-                </a>
-              </li>
-            )}
-            {brand.fields.twitter && (
-              <li>
-                <a
-                  href={brand.fields.twitter}
-                  className="text-indigo-600 hover:text-stone-600"
-                >
-                  Twitter
-                </a>
-              </li>
-            )}
-            {brand.fields.youtube && (
-              <li>
-                <a
-                  href={brand.fields.youtube}
-                  className="text-indigo-600 hover:text-stone-600"
-                >
-                  Youtube
+                  Blog
                 </a>
               </li>
             )}
           </ul>
-        </li>
+        </>
+      )}
 
-        {brand.fields.notes && (
-          <>
-            <Subtitle className="mt-8">Notas</Subtitle>
-            <ul className="mt-2 list-disc marker:text-indigo-300">
-              {brand.fields.notes
-                .split("*")
-                .filter(Boolean)
-                .map((note, i) => (
-                  <li key={i} className="mt-2">
-                    {note.trim()}
+      {Object.keys(socialIcons).some(
+        (social) => !!brand.fields[social as keyof typeof socialIcons]
+      ) && (
+        <>
+          <Subtitle className="mt-8">Redes sociales</Subtitle>
+          <ul className="mt-2 flex items-center gap-4">
+            {Object.keys(socialIcons).map((social) => {
+              const socialIconIndex = social as keyof typeof socialIcons;
+              const Icon = socialIcons[socialIconIndex];
+
+              if (brand.fields[socialIconIndex]) {
+                return (
+                  <li key={socialIconIndex}>
+                    <a
+                      href={brand.fields[socialIconIndex]}
+                      className="text-indigo-600 hover:text-stone-600"
+                    >
+                      <Icon size={28} />
+                    </a>
                   </li>
-                ))}
-            </ul>
-          </>
-        )}
-      </ul>
+                );
+              }
+            })}
+          </ul>
+        </>
+      )}
+
+      {brand.fields.certificates?.length ? (
+        <>
+          <Subtitle className="mt-8">Certificados</Subtitle>
+          <ul className="mt-2 flex items-center gap-4">
+            {brand.fields.certificates.map((certificateId) => {
+              const certificate = brand.fields.allCertificates?.find(
+                (certificate) => certificate.id === certificateId
+              );
+              return <li key={certificateId}>{certificate?.fields.name}</li>;
+            })}
+          </ul>
+        </>
+      ) : null}
+
+      {brand.fields.notes && (
+        <>
+          <Subtitle className="mt-8">Notas</Subtitle>
+          <ul className="mt-2 list-disc marker:text-neutral-300">
+            {brand.fields.notes
+              .split("*")
+              .filter(Boolean)
+              .map((note, i) => (
+                <li
+                  key={i}
+                  className="mt-2 break-all"
+                  dangerouslySetInnerHTML={{ __html: wrapURLs(note).trim() }}
+                />
+              ))}
+          </ul>
+        </>
+      )}
     </div>
   </div>
 );
@@ -259,14 +271,6 @@ export const BrandSummary = ({ brand }: { brand: BrandType }) => (
         location={brand.fields.location}
         production={brand.fields.production}
       />
-
-      {/* <div className="mt-4">
-        <Link href={`/marca/${brand.id}`}>
-          <a className="text-indigo-600 font-semibold">
-            Ver ficha completa &rarr;
-          </a>
-        </Link>
-      </div> */}
     </div>
   </div>
 );

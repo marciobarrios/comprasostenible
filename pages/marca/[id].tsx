@@ -4,7 +4,7 @@ import { Title } from "components/title";
 import { CATEGORIES, Categories } from "components/categories";
 
 import { GetStaticProps, GetStaticPaths } from "next";
-import type { BrandProps, Brand as BrandType } from "../../types";
+import type { BrandProps, Brand as BrandType, Certificate } from "../../types";
 
 export default function BrandDetail({ brand }: BrandProps) {
   const category = brand.fields.type as keyof typeof CATEGORIES;
@@ -25,7 +25,7 @@ export default function BrandDetail({ brand }: BrandProps) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await fetch(
-    `${process.env.AIRTABLE_API}&view=default&fields=name&perPage=all`
+    `${process.env.API_BRANDS}&view=default&fields=name&perPage=all`
   );
   const brands = await res.json();
 
@@ -35,12 +35,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: brands.records.map((brand: BrandType) => ({
       params: {
         id: brand.id,
-        // Returns the brand name without accents or diacritics, and replacing
-        // spaces for dashes, so we can use it in the URL
-        // name: brand.fields.name
-        //   .normalize("NFD")
-        //   .replace(/\p{Diacritic}/gu, "")
-        //   .replace(/\s/g, "-"),
       },
     })),
     fallback: false,
@@ -48,11 +42,20 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const res = await fetch(`${process.env.AIRTABLE_API}&id=${params!.id}`);
-  const brand: BrandType = await res.json();
+  const brandRes = await fetch(`${process.env.API_BRANDS}&id=${params!.id}`);
+  const CertificatesRes = await fetch(process.env.API_CERTIFICATES!);
 
-  // TODO: check brand certificates and retrieve them from the table
+  const brand: BrandType = await brandRes.json();
+  const certificates = await CertificatesRes.json();
+
+  const brandWithCertificates = {
+    ...brand,
+    fields: {
+      ...brand.fields,
+      allCertificates: certificates.records as Certificate[],
+    }
+  }
 
   // Pass post data to the page via props
-  return { props: { brand } };
+  return { props: { brand: brandWithCertificates } };
 };
