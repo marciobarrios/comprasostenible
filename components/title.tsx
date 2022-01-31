@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import type { BaseProps } from "types";
 
-interface Props {
+export interface Props {
   as?: "h1" | "h2" | "h3";
   className?: string;
 }
@@ -15,7 +15,7 @@ export const Title = ({
 
   return (
     <Element
-      className={`text-xl md:text-2xl font-semibold mb-8 text-stone-500 ${className}`}
+      className={`text-xl md:text-2xl font-semibold mb-8 text-neutral-600 ${className}`}
       {...rest}
     />
   );

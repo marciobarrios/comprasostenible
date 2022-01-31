@@ -14,9 +14,9 @@ export default function Home({ brands }: BrandsProps) {
       <Categories />
 
       <Title className="mt-16">Marcas destacadas</Title>
-      <ul>
+      <ul className="xl:flex xl:flex-wrap items-start justify-between">
         {brands.map((brand) => (
-          <li key={brand.id} className="mt-8 md:mt-16 first:mt-0">
+          <li key={brand.id} className="mt-8 md:mt-16 xl:mt-0 xl:mb-16 first:mt-0 xl:w-[36rem]">
             <BrandSummary brand={brand} />
           </li>
         ))}
@@ -26,7 +26,7 @@ export default function Home({ brands }: BrandsProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const res = await fetch(`${process.env.AIRTABLE_API}&view=home`);
+  const res = await fetch(`${process.env.API_BRANDS}&view=home`);
   const brands = await res.json();
 
   // Pass post data to the page via props

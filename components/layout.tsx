@@ -4,6 +4,8 @@ import Head from "next/head";
 import { Header } from "components/header";
 import { Hero } from "components/hero";
 
+import { HiOutlineHeart } from "react-icons/hi";
+
 interface Props {
   title?: string;
   isHome?: boolean;
@@ -31,8 +33,19 @@ export const Layout = ({
     <Header isHome={isHome} />
     {isHome && <Hero />}
 
-    <main className="text-neutral-600 px-4 md:px-8 py-8 md:py-16 max-w-4xl m-auto">
+    <main className="text-neutral-600 px-4 md:px-8 py-8 md:py-16 max-w-4xl xl:max-w-7xl m-auto">
       {children}
     </main>
+    <footer className="text-neutral-600 px-4 md:px-8 py-8 max-w-4xl xl:max-w-7xl m-auto text-sm flex justify-center items-center">
+      Made with <HiOutlineHeart size={16} className="mx-1" /> by{" "}
+      <a
+        className="text-indigo-600 hover:text-stone-600 ml-1"
+        href="http://twitter.com/marciobarrios"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Marcio Barrios
+      </a>
+    </footer>
   </div>
 );
