@@ -64,7 +64,7 @@ export default function About() {
           Tamaño de la empresa (intento dar visibilidad a productores pequeños)
         </li>
         <li>
-          Fabricación sus productos (promuevo la proximidad, los materiales
+          Fabricación de sus productos (promuevo la proximidad, los materiales
           orgánicos o reciclados, y los productos hechos a mano)
         </li>
         <li>Valores que promueve la marca</li>

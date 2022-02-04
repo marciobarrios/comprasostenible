@@ -89,11 +89,13 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
         </a>
       </Link>
 
+      {/*
       <div className="mt-16">
         <a href="#" className="hidden md:block text-indigo-600 hover:text-stone-600 text-sm">
           Reportar un error
         </a>
       </div>
+      */}
     </div>
 
     <div>
