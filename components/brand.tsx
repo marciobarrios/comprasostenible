@@ -214,12 +214,26 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
       {brand.fields.certificates?.length ? (
         <>
           <Subtitle className="mt-8">Certificados</Subtitle>
-          <ul className="mt-2 flex items-center gap-4">
+          <ul className="mt-2 flex flex-wrap items-center gap-4">
             {brand.fields.certificates.map((certificateId) => {
               const certificate = brand.fields.allCertificates?.find(
                 (certificate) => certificate.id === certificateId
               );
-              return <li key={certificateId}>{certificate?.fields.name}</li>;
+              return (
+                <li key={certificateId}>
+                  <a
+                    href={certificate?.fields.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      alt={certificate?.fields.name}
+                      className="h-10 md:h-20 max-w-[80px] md:max-w-[140px] rounded-md object-scale-down"
+                      src={certificate?.fields.logo[0].url}
+                    />
+                  </a>
+                </li>
+              );
             })}
           </ul>
         </>
