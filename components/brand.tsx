@@ -47,7 +47,7 @@ interface LocationsProps {
   production: string[];
 }
 
-const Locations = ({ location, production }: LocationsProps) => (
+const Locations = ({ location = "", production = [] }: LocationsProps) => (
   <ul className="inline-flex">
     <li className="flex pr-4 md:pr-6 md:items-center">
       <IoLocationOutline
