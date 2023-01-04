@@ -45,6 +45,14 @@ export default function About() {
         multinacionales detrás fabricando a destajo en la otra punta del mundo.
       </p>
       <p className="mt-6">
+        En realidad, la mejor alternativa al consumismo desmesurado es evitar
+        comprar compulsivamente, centrarnos en comprar únicamente cuando
+        realmente lo necesitamos, e intentar comprar artículos de segunda mano
+        siempre que sea posible, pero este es otro tema que está fuera del
+        alcance de esta web. Aquí nos vamos a centrar en promover marcas
+        alternativas.
+      </p>
+      <p className="mt-6">
         En definitiva, estás en el sitio correcto si estás interesado en poner
         tu granito de arena para poner un poco de cordura en este mundo
         globalizado y consumista.
@@ -52,8 +60,8 @@ export default function About() {
 
       <Title>¿Cómo es el proceso de elegir las marcas?</Title>
       <p>
-        Pues básicamente yo mismo (Marcio) las eligo una a una según los
-        criterios que considero razonables:
+        Básicamente yo mismo las eligo una a una según los criterios que
+        considero razonables:
       </p>
       <ul className="mt-6 list-disc marker:text-indigo-300">
         <li>Calidad, trazabilidad y durabilidad del producto</li>
