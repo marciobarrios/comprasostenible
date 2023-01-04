@@ -25,27 +25,30 @@ export default function BrandDetail({ brand }: BrandProps) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await fetch(
-    `${process.env.API_BRANDS}&view=default&fields=name&perPage=all`
+    `${process.env.API_BRANDS}&view=default&fields=slug&perPage=all`
   );
   const brands = await res.json();
 
   // Pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
   return {
-    paths: brands.records.map((brand: BrandType) => ({
-      params: {
-        id: brand.id,
-      },
-    })),
+    paths: brands.records.map((brand: BrandType) => {
+      return ({
+        params: {
+          id: brand.fields.slug
+        },
+      })
+    }),
     fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const brandRes = await fetch(`${process.env.API_BRANDS}&id=${params!.id}`);
+  const brandResBySlug = await fetch(`${process.env.API_BRANDS}&view=default&filterByFormula=slug="${params!.id}"`);
   const CertificatesRes = await fetch(process.env.API_CERTIFICATES!);
 
-  const brand: BrandType = await brandRes.json();
+  const brandBySlug = await brandResBySlug.json();
+  const brand = brandBySlug.records[0] as BrandType
   const certificates = await CertificatesRes.json();
 
   const brandWithCertificates = {
@@ -53,8 +56,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     fields: {
       ...brand.fields,
       allCertificates: certificates.records as Certificate[],
-    }
-  }
+    },
+  };
 
   // Pass post data to the page via props
   return { props: { brand: brandWithCertificates } };

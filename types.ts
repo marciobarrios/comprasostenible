@@ -1,6 +1,6 @@
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren } from "react";
 
-export type BaseProps = PropsWithChildren<{ className?: string }>
+export type BaseProps = PropsWithChildren<{ className?: string }>;
 
 interface Thumbnail {
   url: string;
@@ -28,7 +28,7 @@ export interface Certificate {
     marcas: string[];
     url: string;
     logo: Logo[];
-  }
+  };
 }
 
 export interface Brand {
@@ -37,6 +37,7 @@ export interface Brand {
   fields: {
     // Basic info
     name: string;
+    slug: string;
     status: "accepted" | "pending" | "rejected";
     description: string;
     logo: Logo[];
@@ -55,7 +56,7 @@ export interface Brand {
     freeReturns?: boolean;
     highlight?: boolean;
     certificates: string[];
-    allCertificates?: Certificate[]
+    allCertificates?: Certificate[];
 
     // URLs
     url: string;
@@ -73,9 +74,9 @@ export interface Brand {
 }
 
 export interface BrandProps {
-  brand: Brand
+  brand: Brand;
 }
 
 export interface BrandsProps {
-  brands: Brand[]
+  brands: Brand[];
 }

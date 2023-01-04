@@ -262,7 +262,7 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
 
 export const BrandSummary = ({ brand }: { brand: BrandType }) => (
   <div className="flex items-start">
-    <Link href={`/marca/${brand.id}`}>
+    <Link href={`/marca/${brand.fields.slug}`}>
       <a className="mr-4 md:mr-8 p-4 rounded-md bg-white shadow-lg border">
         <img
           alt={`logo de ${brand.fields.name}`}
@@ -274,7 +274,7 @@ export const BrandSummary = ({ brand }: { brand: BrandType }) => (
 
     <div>
       <h3 className="text-neutral-800 font-bold text-xl">
-        <Link href={`/marca/${brand.id}`}>
+        <Link href={`/marca/${brand.fields.slug}`}>
           <a className="p-2 -ml-2 text-indigo-600 hover:text-neutral-50 hover:bg-indigo-600 rounded-md hover:after:content-['→'] after:ml-1 transition-colors">
             {brand.fields.name}
           </a>
