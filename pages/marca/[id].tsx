@@ -24,41 +24,74 @@ export default function BrandDetail({ brand }: BrandProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch(
-    `${process.env.API_BRANDS}&view=default&fields=slug&perPage=all`
-  );
-  const brands = await res.json();
+  try {
+    const res = await fetch(
+      `${process.env.API_BRANDS}&view=default&fields=slug&perPage=all`
+    );
 
-  // Pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
-  return {
-    paths: brands.records.map((brand: BrandType) => {
-      return ({
-        params: {
-          id: brand.fields.slug
-        },
-      })
-    }),
-    fallback: false,
-  };
+    if (!res.ok) {
+      console.error(`Failed to fetch paths: ${res.status} ${res.statusText}`);
+      return { paths: [], fallback: false };
+    }
+
+    const brands = await res.json();
+
+    // Pre-render only these paths at build time.
+    // { fallback: false } means other routes should 404.
+    return {
+      paths: (brands.records || []).map((brand: BrandType) => {
+        return {
+          params: {
+            id: brand.fields.slug,
+          },
+        };
+      }),
+      fallback: false,
+    };
+  } catch (error) {
+    console.error("Error fetching paths:", error);
+    return { paths: [], fallback: false };
+  }
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const brandResBySlug = await fetch(`${process.env.API_BRANDS}&view=default&filterByFormula=slug="${params!.id}"`);
-  const CertificatesRes = await fetch(process.env.API_CERTIFICATES!);
+  try {
+    const brandResBySlug = await fetch(
+      `${process.env.API_BRANDS}&view=default&filterByFormula=slug="${
+        params!.id
+      }"`
+    );
+    const CertificatesRes = await fetch(process.env.API_CERTIFICATES!);
 
-  const brandBySlug = await brandResBySlug.json();
-  const brand = brandBySlug.records[0] as BrandType
-  const certificates = await CertificatesRes.json();
+    if (!brandResBySlug.ok) {
+      console.error(`Failed to fetch brand: ${brandResBySlug.status}`);
+      return { notFound: true };
+    }
 
-  const brandWithCertificates = {
-    ...brand,
-    fields: {
-      ...brand.fields,
-      allCertificates: certificates.records as Certificate[],
-    },
-  };
+    const brandBySlug = await brandResBySlug.json();
+    const brand = brandBySlug.records?.[0] as BrandType;
 
-  // Pass post data to the page via props
-  return { props: { brand: brandWithCertificates } };
+    if (!brand) {
+      return { notFound: true };
+    }
+
+    let certificates = { records: [] };
+    if (CertificatesRes.ok) {
+      certificates = await CertificatesRes.json();
+    }
+
+    const brandWithCertificates = {
+      ...brand,
+      fields: {
+        ...brand.fields,
+        allCertificates: (certificates.records || []) as Certificate[],
+      },
+    };
+
+    // Pass post data to the page via props
+    return { props: { brand: brandWithCertificates } };
+  } catch (error) {
+    console.error("Error fetching brand details:", error);
+    return { notFound: true };
+  }
 };
