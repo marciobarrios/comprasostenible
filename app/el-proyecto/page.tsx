@@ -1,6 +1,10 @@
-import { PropsWithChildren } from "react";
-import { Layout } from "components/layout";
 import { Title as TitleBase, Props as TitleProps } from "components/title";
+import { PropsWithChildren } from "react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "El proyecto ~ comprasostenible.co",
+};
 
 const Title = (props: PropsWithChildren<TitleProps>) => (
   <TitleBase className="mt-10 first:mt-0 mb-2" {...props} />
@@ -8,7 +12,7 @@ const Title = (props: PropsWithChildren<TitleProps>) => (
 
 export default function About() {
   return (
-    <Layout>
+    <>
       <Title>¿Quién está detrás?</Title>
       <p>
         Mi nombre es{" "}
@@ -114,6 +118,6 @@ export default function About() {
         </a>
         .
       </p>
-    </Layout>
+    </>
   );
 }

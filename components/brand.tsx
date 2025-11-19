@@ -82,11 +82,12 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
 
       <Subtitle className="mb-4">Categoría</Subtitle>
 
-      <Link href={`/categoria/${brand.fields.type}`}>
-        <a className="py-3 px-2 md:px-4 border rounded-md font-semibold text-indigo-600 hover:border-indigo-600 hover:bg-indigo-600 hover:text-neutral-50 transition-colors">
-          {brand.fields.type.replace(/^\w/, (c) => c.toUpperCase())}
-          <span className="hidden md:inline"> &rarr;</span>
-        </a>
+      <Link
+        href={`/categoria/${brand.fields.type}`}
+        className="py-3 px-2 md:px-4 border rounded-md font-semibold text-indigo-600 hover:border-indigo-600 hover:bg-indigo-600 hover:text-neutral-50 transition-colors"
+      >
+        {brand.fields.type.replace(/^\w/, (c) => c.toUpperCase())}
+        <span className="hidden md:inline"> &rarr;</span>
       </Link>
 
       {/*
@@ -262,22 +263,24 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
 
 export const BrandSummary = ({ brand }: { brand: BrandType }) => (
   <div className="flex items-start">
-    <Link href={`/marca/${brand.fields.slug}`}>
-      <a className="mr-4 md:mr-8 p-4 rounded-md bg-white shadow-lg border">
-        <img
-          alt={`logo de ${brand.fields.name}`}
-          className="w-16 md:w-40 max-w-none aspect-square rounded-md object-scale-down"
-          src={brand.fields.logo[0].url}
-        />
-      </a>
+    <Link
+      href={`/marca/${brand.fields.slug}`}
+      className="mr-4 md:mr-8 p-4 rounded-md bg-white shadow-lg border"
+    >
+      <img
+        alt={`logo de ${brand.fields.name}`}
+        className="w-16 md:w-40 max-w-none aspect-square rounded-md object-scale-down"
+        src={brand.fields.logo[0].url}
+      />
     </Link>
 
     <div>
       <h3 className="text-neutral-800 font-bold text-xl">
-        <Link href={`/marca/${brand.fields.slug}`}>
-          <a className="p-2 -ml-2 text-indigo-600 hover:text-neutral-50 hover:bg-indigo-600 rounded-md hover:after:content-['→'] after:ml-1 transition-colors">
-            {brand.fields.name}
-          </a>
+        <Link
+          href={`/marca/${brand.fields.slug}`}
+          className="p-2 -ml-2 text-indigo-600 hover:text-neutral-50 hover:bg-indigo-600 rounded-md hover:after:content-['→'] after:ml-1 transition-colors"
+        >
+          {brand.fields.name}
         </Link>
       </h3>
 

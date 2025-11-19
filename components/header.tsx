@@ -1,13 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-interface Props {
-  isHome?: boolean;
-}
+export const Header = () => {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
-export const Header = ({ isHome }: Props) => (
-  <div className="flex justify-between items-center bg-neutral-900 py-3 px-4">
-    <Link href="/">
-      <a className="text-l md:text-xl font-extrabold text-neutral-100">
+  return (
+    <div className="flex justify-between items-center bg-neutral-900 py-3 px-4">
+      <Link
+        href="/"
+        className="text-l md:text-xl font-extrabold text-neutral-100"
+      >
         Compra{" "}
         {isHome ? (
           "Sostenible"
@@ -16,10 +21,10 @@ export const Header = ({ isHome }: Props) => (
             <span className="relative text-neutral-100">Sostenible</span>
           </span>
         )}
-      </a>
-    </Link>
-    <Link href="/el-proyecto">
-      <a className="text-neutral-300 text-sm">El proyecto</a>
-    </Link>
-  </div>
-);
+      </Link>
+      <Link href="/el-proyecto" className="text-neutral-300 text-sm">
+        El proyecto
+      </Link>
+    </div>
+  );
+};

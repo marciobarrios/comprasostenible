@@ -1,15 +1,31 @@
 import { BrandSummary } from "components/brand";
-import { Layout } from "components/layout";
 import { Title } from "components/title";
 import { Categories } from "components/categories";
+import { Hero } from "components/hero";
 import { base } from "lib/airtable";
+import { Brand } from "types";
 
-import { GetStaticProps } from "next";
-import type { BrandsProps } from "types";
+async function getBrands() {
+  try {
+    const records = await base("Marcas").select({ view: "home" }).all();
+    const brands = records.map((record) => ({
+      id: record.id,
+      fields: record.fields,
+    })) as unknown as Brand[];
 
-export default function Home({ brands }: BrandsProps) {
+    return brands;
+  } catch (error) {
+    console.error("Error fetching brands:", error);
+    return [];
+  }
+}
+
+export default async function Home() {
+  const brands = await getBrands();
+
   return (
-    <Layout isHome>
+    <>
+      <Hero />
       <Title>Categorías</Title>
 
       <Categories />
@@ -25,21 +41,6 @@ export default function Home({ brands }: BrandsProps) {
           </li>
         ))}
       </ul>
-    </Layout>
+    </>
   );
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-  try {
-    const records = await base("Marcas").select({ view: "home" }).all();
-    const brands = records.map((record) => ({
-      id: record.id,
-      fields: record.fields,
-    })) as any;
-
-    return { props: { brands } };
-  } catch (error) {
-    console.error("Error fetching brands:", error);
-    return { props: { brands: [] } };
-  }
-};
