@@ -2,6 +2,7 @@ import { BrandSummary } from "components/brand";
 import { Layout } from "components/layout";
 import { Title } from "components/title";
 import { Categories } from "components/categories";
+import { base } from "lib/airtable";
 
 import { GetStaticProps } from "next";
 import type { BrandsProps } from "types";
@@ -30,15 +31,13 @@ export default function Home({ brands }: BrandsProps) {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const res = await fetch(`${process.env.API_BRANDS}&view=home`);
+    const records = await base("Marcas").select({ view: "home" }).all();
+    const brands = records.map((record) => ({
+      id: record.id,
+      fields: record.fields,
+    })) as any;
 
-    if (!res.ok) {
-      console.error(`Failed to fetch brands: ${res.status} ${res.statusText}`);
-      return { props: { brands: [] } };
-    }
-
-    const brands = await res.json();
-    return { props: { brands: brands.records || [] } };
+    return { props: { brands } };
   } catch (error) {
     console.error("Error fetching brands:", error);
     return { props: { brands: [] } };

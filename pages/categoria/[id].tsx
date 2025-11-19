@@ -2,6 +2,7 @@ import { BrandSummary } from "components/brand";
 import { Layout } from "components/layout";
 import { Title } from "components/title";
 import { CATEGORIES, Categories } from "components/categories";
+import { base } from "lib/airtable";
 
 import { GetStaticProps, GetStaticPaths } from "next";
 import type { BrandsProps } from "../../types";
@@ -22,7 +23,10 @@ export default function Type({ brands }: BrandsProps) {
 
       <ul className="xl:flex xl:flex-wrap items-start justify-between">
         {brands.map((brand) => (
-          <li key={brand.id} className="mt-8 md:mt-16 xl:mt-0 xl:mb-16 first:mt-0 xl:w-[36rem]">
+          <li
+            key={brand.id}
+            className="mt-8 md:mt-16 xl:mt-0 xl:mb-16 first:mt-0 xl:w-[36rem]"
+          >
             <BrandSummary brand={brand} />
           </li>
         ))}
@@ -44,11 +48,15 @@ export const getStaticPaths: GetStaticPaths = async () => ({
 });
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const res = await fetch(
-    `${process.env.API_BRANDS}&view=${params!.id}&perPage=all`
-  );
-  const brands = await res.json();
+  const records = await base("Marcas")
+    .select({ view: params!.id as string })
+    .all();
+
+  const brands = records.map((record) => ({
+    id: record.id,
+    fields: record.fields,
+  })) as any;
 
   // Pass post data to the page via props
-  return { props: { brands: brands.records } };
+  return { props: { brands } };
 };

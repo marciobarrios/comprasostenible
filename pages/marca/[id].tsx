@@ -2,6 +2,7 @@ import { Brand } from "components/brand";
 import { Layout } from "components/layout";
 import { Title } from "components/title";
 import { CATEGORIES, Categories } from "components/categories";
+import { base } from "lib/airtable";
 
 import { GetStaticProps, GetStaticPaths } from "next";
 import type { BrandProps, Brand as BrandType, Certificate } from "../../types";
@@ -25,27 +26,14 @@ export default function BrandDetail({ brand }: BrandProps) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const res = await fetch(
-      `${process.env.API_BRANDS}&view=default&fields=slug&perPage=all`
-    );
+    const records = await base("Marcas")
+      .select({ view: "default", fields: ["slug"] })
+      .all();
 
-    if (!res.ok) {
-      console.error(`Failed to fetch paths: ${res.status} ${res.statusText}`);
-      return { paths: [], fallback: false };
-    }
-
-    const brands = await res.json();
-
-    // Pre-render only these paths at build time.
-    // { fallback: false } means other routes should 404.
     return {
-      paths: (brands.records || []).map((brand: BrandType) => {
-        return {
-          params: {
-            id: brand.fields.slug,
-          },
-        };
-      }),
+      paths: records.map((record) => ({
+        params: { id: record.get("slug") as string },
+      })),
       fallback: false,
     };
   } catch (error) {
@@ -56,35 +44,35 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
-    const brandResBySlug = await fetch(
-      `${process.env.API_BRANDS}&view=default&filterByFormula=slug="${
-        params!.id
-      }"`
-    );
-    const CertificatesRes = await fetch(process.env.API_CERTIFICATES!);
+    const brandRecords = await base("Marcas")
+      .select({
+        view: "default",
+        filterByFormula: `slug="${params!.id}"`,
+        maxRecords: 1,
+      })
+      .all();
 
-    if (!brandResBySlug.ok) {
-      console.error(`Failed to fetch brand: ${brandResBySlug.status}`);
+    if (brandRecords.length === 0) {
       return { notFound: true };
     }
 
-    const brandBySlug = await brandResBySlug.json();
-    const brand = brandBySlug.records?.[0] as BrandType;
+    const brandRecord = brandRecords[0];
+    const brand = {
+      id: brandRecord.id,
+      fields: brandRecord.fields,
+    } as unknown as BrandType;
 
-    if (!brand) {
-      return { notFound: true };
-    }
-
-    let certificates = { records: [] };
-    if (CertificatesRes.ok) {
-      certificates = await CertificatesRes.json();
-    }
+    const certificateRecords = await base("Certificados").select().all();
+    const certificates = certificateRecords.map((record) => ({
+      id: record.id,
+      fields: record.fields,
+    }));
 
     const brandWithCertificates = {
       ...brand,
       fields: {
         ...brand.fields,
-        allCertificates: (certificates.records || []) as Certificate[],
+        allCertificates: (certificates || []) as Certificate[],
       },
     };
 
