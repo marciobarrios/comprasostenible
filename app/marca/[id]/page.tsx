@@ -133,7 +133,7 @@ export default async function BrandPage({
     <>
       <Brand brand={brand} />
 
-      <div className="h-1 border-b my-10" />
+      <div className="h-1 border-b border-gray-200 my-10" />
 
       <Title>Explorar otras categorías</Title>
       <Categories exclude={category} />

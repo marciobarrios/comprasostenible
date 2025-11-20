@@ -65,14 +65,14 @@ export default async function CategoryPage({
         {brands.map((brand) => (
           <li
             key={brand.id}
-            className="mt-8 md:mt-16 xl:mt-0 xl:mb-16 first:mt-0 xl:w-[36rem]"
+            className="mt-8 md:mt-16 xl:mt-0 xl:mb-16 first:mt-0 xl:w-xl"
           >
             <BrandSummary brand={brand} />
           </li>
         ))}
       </ul>
 
-      <div className="h-1 border-b my-10" />
+      <div className="h-1 border-b border-gray-200 my-10" />
 
       <Title>Explorar otras categorías</Title>
       <Categories exclude={category} />

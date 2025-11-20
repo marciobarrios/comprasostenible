@@ -59,7 +59,7 @@ const Locations = ({ location = "", production = [] }: LocationsProps) => (
         {location}
       </div>
     </li>
-    <li className="md:border-l flex pl-4 md:pl-6 md:items-center">
+    <li className="md:border-l border-gray-200 flex pl-4 md:pl-6 md:items-center">
       <BsBuilding size={32} className="hidden md:block text-neutral-400" />
       <div className="md:ml-2">
         <Subtitle className="text-sm">Producción</Subtitle>
@@ -72,7 +72,7 @@ const Locations = ({ location = "", production = [] }: LocationsProps) => (
 export const Brand = ({ brand }: { brand: BrandType }) => (
   <div className="flex items-start">
     <div className="mr-4 md:mr-8">
-      <div className=" p-4 rounded-md bg-white shadow-lg border mb-10">
+      <div className=" p-4 rounded-md bg-white shadow-lg border border-gray-200 mb-10">
         <img
           alt={`logo de ${brand.fields.name}`}
           className="w-16 md:w-40 max-w-none aspect-square rounded-md object-scale-down"
@@ -84,19 +84,11 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
 
       <Link
         href={`/categoria/${brand.fields.type}`}
-        className="py-3 px-2 md:px-4 border rounded-md font-semibold text-indigo-600 hover:border-indigo-600 hover:bg-indigo-600 hover:text-neutral-50 transition-colors"
+        className="py-3 px-2 md:px-4 border border-gray-200 rounded-md font-semibold text-indigo-600 hover:border-indigo-600 hover:bg-indigo-600 hover:text-neutral-50 transition-colors"
       >
         {brand.fields.type.replace(/^\w/, (c) => c.toUpperCase())}
         <span className="hidden md:inline"> &rarr;</span>
       </Link>
-
-      {/*
-      <div className="mt-16">
-        <a href="#" className="hidden md:block text-indigo-600 hover:text-stone-600 text-sm">
-          Reportar un error
-        </a>
-      </div>
-      */}
     </div>
 
     <div>
@@ -132,7 +124,7 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
 
               return (
                 <li
-                  className="border p-3 flex flex-initial flex-col items-center rounded-lg bg-neutral-100 justify-center"
+                  className="border border-gray-200 p-3 flex flex-initial flex-col items-center rounded-lg bg-neutral-100 justify-center"
                   key={highlight}
                 >
                   <Icon size={24} className="text-green-600" />
@@ -229,7 +221,7 @@ export const Brand = ({ brand }: { brand: BrandType }) => (
                   >
                     <img
                       alt={certificate?.fields.name}
-                      className="h-10 md:h-20 max-w-[80px] md:max-w-[140px] rounded-md object-scale-down"
+                      className="h-10 md:h-20 max-w-20 md:max-w-28 rounded-md object-scale-down"
                       src={certificate?.fields.logo[0].url}
                     />
                   </a>
@@ -265,7 +257,7 @@ export const BrandSummary = ({ brand }: { brand: BrandType }) => (
   <div className="flex items-start">
     <Link
       href={`/marca/${brand.fields.slug}`}
-      className="mr-4 md:mr-8 p-4 rounded-md bg-white shadow-lg border"
+      className="mr-4 md:mr-8 p-4 rounded-md bg-white shadow-lg border border-gray-200"
     >
       <img
         alt={`logo de ${brand.fields.name}`}

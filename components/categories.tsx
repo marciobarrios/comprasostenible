@@ -13,7 +13,7 @@ const Category = ({ name }: { name: keyof typeof CATEGORIES }) => (
   <li className="my-4 md:my-0 flex">
     <Link
       href={`/categoria/${name}`}
-      className="flex text-center items-center py-3 px-4 border rounded-md font-semibold text-indigo-600 hover:border-indigo-600 hover:bg-indigo-600 hover:text-neutral-50 transition-colors"
+      className="flex text-center items-center py-3 px-4 border border-gray-200 rounded-md font-semibold text-indigo-600 hover:border-indigo-600 hover:bg-indigo-600 hover:text-neutral-50 transition-colors"
     >
       {CATEGORIES[name]}
       <span className="md:hidden lg:inline ml-2">&rarr;</span>
