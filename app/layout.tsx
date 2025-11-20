@@ -37,7 +37,7 @@ export default function RootLayout({
             Made with <HiOutlineHeart size={16} className="mx-1" /> by{" "}
             <a
               className="text-indigo-600 hover:text-stone-600 ml-1"
-              href="http://twitter.com/marciobarrios"
+              href="http://marciobarrios.com"
               target="_blank"
               rel="noreferrer"
             >
