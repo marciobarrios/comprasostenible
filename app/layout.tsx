@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import { Header } from "components/header";
 import { HiOutlineHeart } from "react-icons/hi";
 import { Metadata, Viewport } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Marcas sostenibles ~ comprasostenible.co",
@@ -30,6 +31,7 @@ export default function RootLayout({
           <Header />
           <main className="text-neutral-600 px-4 md:px-8 py-8 md:py-16 max-w-4xl xl:max-w-7xl m-auto">
             {children}
+            <SpeedInsights />
           </main>
           <footer className="text-neutral-600 px-4 md:px-8 py-8 max-w-4xl xl:max-w-7xl m-auto text-sm flex justify-center items-center">
             Made with <HiOutlineHeart size={16} className="mx-1" /> by{" "}

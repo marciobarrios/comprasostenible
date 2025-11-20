@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.17",
+    "@vercel/speed-insights": "^1.2.0",
     "airtable": "^0.12.2",
     "next": "^16.0.3",
     "react": "^19.2.0",
