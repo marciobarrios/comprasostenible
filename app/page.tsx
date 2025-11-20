@@ -1,7 +1,6 @@
 import { BrandSummary } from "components/brand";
 import { Title } from "components/title";
 import { Categories } from "components/categories";
-import { Hero } from "components/hero";
 import { base } from "lib/airtable";
 import { Brand } from "types";
 
@@ -25,7 +24,6 @@ export default async function Home() {
 
   return (
     <>
-      <Hero />
       <Title>Categorías</Title>
 
       <Categories />
