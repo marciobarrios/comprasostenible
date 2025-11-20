@@ -64,8 +64,8 @@ export default function About() {
 
       <Title>¿Cómo es el proceso de elegir las marcas?</Title>
       <p>
-        Básicamente yo mismo las eligo una a una según los criterios que
-        considero razonables:
+        Es un proceso manual, eligo las marcas personalmente una a una según los
+        criterios que considero razonables:
       </p>
       <ul className="mt-6 list-disc marker:text-indigo-300">
         <li>Calidad, trazabilidad y durabilidad del producto</li>
