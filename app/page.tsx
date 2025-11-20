@@ -3,14 +3,27 @@ import { Title } from "components/title";
 import { Categories } from "components/categories";
 import { base } from "lib/airtable";
 import { Brand } from "types";
+import { urlToBase64 } from "utils";
 
 async function getBrands() {
   try {
     const records = await base("Marcas").select({ view: "home" }).all();
-    const brands = records.map((record) => ({
-      id: record.id,
-      fields: record.fields,
-    })) as unknown as Brand[];
+    const brands = (await Promise.all(
+      records.map(async (record) => {
+        const fields = record.fields;
+        if (
+          fields.logo &&
+          Array.isArray(fields.logo) &&
+          fields.logo.length > 0
+        ) {
+          fields.logo[0].url = await urlToBase64(fields.logo[0].url);
+        }
+        return {
+          id: record.id,
+          fields: fields,
+        };
+      })
+    )) as unknown as Brand[];
 
     return brands;
   } catch (error) {

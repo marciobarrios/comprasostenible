@@ -5,6 +5,7 @@ import { base } from "lib/airtable";
 import { Brand as BrandType, Certificate } from "types";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { urlToBase64 } from "utils";
 
 export async function generateStaticParams() {
   try {
@@ -66,16 +67,38 @@ async function getBrand(slug: string) {
     }
 
     const brandRecord = brandRecords[0];
+    const brandFields = brandRecord.fields;
+
+    if (
+      brandFields.logo &&
+      Array.isArray(brandFields.logo) &&
+      brandFields.logo.length > 0
+    ) {
+      brandFields.logo[0].url = await urlToBase64(brandFields.logo[0].url);
+    }
+
     const brand = {
       id: brandRecord.id,
-      fields: brandRecord.fields,
+      fields: brandFields,
     } as unknown as BrandType;
 
     const certificateRecords = await base("Certificados").select().all();
-    const certificates = certificateRecords.map((record) => ({
-      id: record.id,
-      fields: record.fields,
-    }));
+    const certificates = await Promise.all(
+      certificateRecords.map(async (record) => {
+        const fields = record.fields;
+        if (
+          fields.logo &&
+          Array.isArray(fields.logo) &&
+          fields.logo.length > 0
+        ) {
+          fields.logo[0].url = await urlToBase64(fields.logo[0].url);
+        }
+        return {
+          id: record.id,
+          fields: fields,
+        };
+      })
+    );
 
     const brandWithCertificates = {
       ...brand,

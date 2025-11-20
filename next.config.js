@@ -2,6 +2,15 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ["dl.airtable.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "dl.airtable.com",
+      },
+      {
+        protocol: "https",
+        hostname: "v5.airtableusercontent.com",
+      },
+    ],
   },
 };

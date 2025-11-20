@@ -28,3 +28,16 @@ export function slugify(text: string): string {
     .replace(/\-\-+/g, "-") // Replace multiple - with single -
     .replace(/\-$/g, ""); // Remove trailing -
 }
+
+export async function urlToBase64(url: string): Promise<string> {
+  try {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    const base64 = Buffer.from(arrayBuffer).toString("base64");
+    const mimeType = response.headers.get("content-type") || "image/jpeg";
+    return `data:${mimeType};base64,${base64}`;
+  } catch (error) {
+    console.error("Error converting URL to base64:", error);
+    return url; // Fallback to original URL if conversion fails
+  }
+}
