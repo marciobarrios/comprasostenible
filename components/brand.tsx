@@ -69,14 +69,39 @@ const Locations = ({ location = "", production = [] }: LocationsProps) => (
   </ul>
 );
 
+const BrandLogo = ({
+  brand,
+  className,
+}: {
+  brand: BrandType;
+  className: string;
+}) => {
+  if (brand.fields.logo?.length) {
+    return (
+      <img
+        alt={`logo de ${brand.fields.name}`}
+        className={`${className} object-scale-down`}
+        src={brand.fields.logo[0].url}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={`${className} bg-white flex items-center justify-center text-black font-bold uppercase text-4xl`}
+    >
+      {brand.fields.name[0]}
+    </div>
+  );
+};
+
 export const Brand = ({ brand }: { brand: BrandType }) => (
   <div className="flex items-start">
     <div className="mr-4 md:mr-8">
       <div className=" p-4 rounded-md bg-white shadow-lg border border-gray-200 mb-10">
-        <img
-          alt={`logo de ${brand.fields.name}`}
-          className="w-16 md:w-40 max-w-none aspect-square rounded-md object-scale-down"
-          src={brand.fields.logo[0].url}
+        <BrandLogo
+          brand={brand}
+          className="w-16 md:w-40 max-w-none aspect-square rounded-md"
         />
       </div>
 
@@ -259,10 +284,9 @@ export const BrandSummary = ({ brand }: { brand: BrandType }) => (
       href={`/marca/${brand.fields.slug}`}
       className="mr-4 md:mr-8 p-4 rounded-md bg-white shadow-lg border border-gray-200"
     >
-      <img
-        alt={`logo de ${brand.fields.name}`}
-        className="w-16 md:w-40 max-w-none aspect-square rounded-md object-scale-down"
-        src={brand.fields.logo[0].url}
+      <BrandLogo
+        brand={brand}
+        className="w-16 md:w-40 max-w-none aspect-square rounded-md"
       />
     </Link>
 
