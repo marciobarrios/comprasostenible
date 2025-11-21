@@ -5,7 +5,7 @@ export const CATEGORIES = {
   calzado: "Calzado",
   higiene: "Higiene y cosmética",
   muebles: "Muebles y decoración",
-  accesorios: "Accesorios",
+  limpieza: "Limpieza",
   peques: "Peques",
 };
 
