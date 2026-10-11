@@ -5,7 +5,7 @@ import { base } from "lib/airtable";
 import { Brand as BrandType, Certificate } from "types";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { urlToBase64 } from "utils";
+import { cachedLogoDataUri } from "lib/cached-logo";
 
 export async function generateStaticParams() {
   try {
@@ -74,7 +74,7 @@ async function getBrand(slug: string) {
       Array.isArray(brandFields.logo) &&
       brandFields.logo.length > 0
     ) {
-      brandFields.logo[0].url = await urlToBase64(brandFields.logo[0].url);
+      brandFields.logo[0].url = await cachedLogoDataUri(brandFields.logo[0].url);
     }
 
     const brand = {
@@ -91,7 +91,7 @@ async function getBrand(slug: string) {
           Array.isArray(fields.logo) &&
           fields.logo.length > 0
         ) {
-          fields.logo[0].url = await urlToBase64(fields.logo[0].url);
+          fields.logo[0].url = await cachedLogoDataUri(fields.logo[0].url);
         }
         return {
           id: record.id,

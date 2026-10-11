@@ -4,23 +4,26 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:logos": "node scripts/test-logos.mjs",
+    "test:build": "node scripts/test-build.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.17",
     "@vercel/speed-insights": "^1.2.0",
     "airtable": "^0.12.2",
-    "next": "^16.0.3",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-icons": "^4.3.1"
+    "next": "16.3.8",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-icons": "^4.3.1",
+    "sharp": "0.35.5"
   },
   "devDependencies": {
     "@types/node": "17.0.4",
     "@types/react": "17.0.38",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.3",
-    "postcss": "^8.5.6",
+    "eslint-config-next": "16.3.8",
+    "postcss": "8.5.29",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3"
   }
