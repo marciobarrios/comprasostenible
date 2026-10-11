@@ -4,7 +4,7 @@ import { CATEGORIES, Categories } from "components/categories";
 import { base } from "lib/airtable";
 import { Brand } from "types";
 import { Metadata } from "next";
-import { urlToBase64 } from "utils";
+import { cachedLogoDataUri } from "lib/cached-logo";
 
 export async function generateStaticParams() {
   return Object.keys(CATEGORIES).map((category) => ({
@@ -31,7 +31,7 @@ async function getBrands(categoryId: string) {
     records.map(async (record) => {
       const fields = record.fields;
       if (fields.logo && Array.isArray(fields.logo) && fields.logo.length > 0) {
-        fields.logo[0].url = await urlToBase64(fields.logo[0].url);
+        fields.logo[0].url = await cachedLogoDataUri(fields.logo[0].url);
       }
       return {
         id: record.id,
