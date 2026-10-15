@@ -1,13 +1,7 @@
 import Link from "next/link";
+import { CATEGORIES } from "lib/categories";
 
-export const CATEGORIES = {
-  ropa: "Ropa",
-  calzado: "Calzado",
-  higiene: "Higiene y cosmética",
-  muebles: "Muebles y decoración",
-  limpieza: "Limpieza",
-  peques: "Peques",
-};
+export { CATEGORIES } from "lib/categories";
 
 const Category = ({ name }: { name: keyof typeof CATEGORIES }) => (
   <li className="my-4 md:my-0 flex">

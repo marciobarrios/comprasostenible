@@ -19,8 +19,10 @@ function load(source, mocks = {}) {
   return exports;
 }
 
-const categories = load("components/categories.tsx");
+const categoryData = load("lib/categories.ts");
+const categories = load("components/categories.tsx", { "lib/categories": categoryData });
 const page = load("app/categoria/[id]/page.tsx", {
+  "lib/categories": categoryData,
   "components/categories": categories,
   "components/brand": { BrandSummary: () => null },
   "components/title": { Title: () => null },

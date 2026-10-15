@@ -73,7 +73,9 @@ try {
     assert.equal(response.status, 200);
     assert.match(await response.text(), /Fixture brand/);
   }
-  for (const id of ["accesorios", "no-existe", "constructor", "toString", "__proto__", "ropa-no-existe"]) {
+  const invalidCategories = ["accesorios", "no-existe", "constructor", "toString", "__proto__", "ropa-no-existe",
+    ...categories.map((id) => id[0].toUpperCase() + id.slice(1)), ...categories.map((id) => id.toUpperCase())];
+  for (const id of invalidCategories) {
     const response = await fetch(`${origin}/categoria/${id}`);
     assert.equal(response.status, 404, `${id} must return HTTP 404`);
     const html = await response.text();
@@ -82,7 +84,7 @@ try {
   }
   assert.equal(airtableRequests, beforeRequests,
     "Static valid pages and invalid categories must make zero runtime Airtable requests");
-  console.log("PASS: six static categories return HTTP 200; six unknown IDs return HTTP 404; zero runtime Airtable calls.");
+  console.log(`PASS: six static categories return HTTP 200; ${invalidCategories.length} invalid IDs (including case variants) return HTTP 404; zero runtime Airtable calls.`);
   console.log("PASS: home, categories and brand detail still prerender with compact durable logos.");
 } finally {
   if (server && server.exitCode === null) {

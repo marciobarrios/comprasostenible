@@ -6,15 +6,16 @@ import { Brand } from "types";
 import { Metadata } from "next";
 import { cachedLogoDataUri } from "lib/cached-logo";
 import { notFound } from "next/navigation";
+import { isCategory } from "lib/categories";
 
 // Only the categories generated below have corresponding Airtable views.
 export const dynamicParams = false;
 
 function getCategory(id: string): keyof typeof CATEGORIES {
-  if (!Object.prototype.hasOwnProperty.call(CATEGORIES, id)) {
+  if (!isCategory(id)) {
     notFound();
   }
-  return id as keyof typeof CATEGORIES;
+  return id;
 }
 
 export async function generateStaticParams() {
