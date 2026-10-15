@@ -6,6 +6,7 @@
     "start": "next start",
     "lint": "next lint",
     "test:logos": "node scripts/test-logos.mjs",
+    "test:categories": "node scripts/test-categories.mjs",
     "test:build": "node scripts/test-build.mjs"
   },
   "dependencies": {

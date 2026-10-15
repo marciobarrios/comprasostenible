@@ -5,6 +5,18 @@ import { base } from "lib/airtable";
 import { Brand } from "types";
 import { Metadata } from "next";
 import { cachedLogoDataUri } from "lib/cached-logo";
+import { notFound } from "next/navigation";
+import { isCategory } from "lib/categories";
+
+// Only the categories generated below have corresponding Airtable views.
+export const dynamicParams = false;
+
+function getCategory(id: string): keyof typeof CATEGORIES {
+  if (!isCategory(id)) {
+    notFound();
+  }
+  return id;
+}
 
 export async function generateStaticParams() {
   return Object.keys(CATEGORIES).map((category) => ({
@@ -18,13 +30,13 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const category = id as keyof typeof CATEGORIES;
+  const category = getCategory(id);
   return {
     title: `Marcas sostenibles de ${CATEGORIES[category]} ~ comprasostenible.co`,
   };
 }
 
-async function getBrands(categoryId: string) {
+async function getBrands(categoryId: keyof typeof CATEGORIES) {
   const records = await base("Marcas").select({ view: categoryId }).all();
 
   const brands = (await Promise.all(
@@ -49,8 +61,8 @@ export default async function CategoryPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const brands = await getBrands(id);
-  const category = id as keyof typeof CATEGORIES;
+  const category = getCategory(id);
+  const brands = await getBrands(category);
 
   return (
     <>
