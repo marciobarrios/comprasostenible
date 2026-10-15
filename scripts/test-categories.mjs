@@ -5,6 +5,8 @@ import vm from "node:vm";
 import ts from "typescript";
 
 const require = createRequire(import.meta.url);
+// Load only the matcher helper, without the server-only config-testing helpers.
+const { unstable_doesMiddlewareMatch } = require("next/dist/experimental/testing/server/middleware-testing-utils");
 let airtableCalls = 0;
 const views = [];
 function load(source, mocks = {}) {
@@ -20,6 +22,29 @@ function load(source, mocks = {}) {
 }
 
 const categoryData = load("lib/categories.ts");
+const { config: proxyConfig } = load("proxy.ts", { "lib/categories": categoryData });
+const matchesProxy = (pathname) => unstable_doesMiddlewareMatch({
+  config: proxyConfig, url: `http://localhost${pathname}`,
+});
+for (const id of Object.keys(categoryData.CATEGORIES)) {
+  for (const suffix of ["", "/", "?source=test", "/?source=test"]) {
+    assert.equal(matchesProxy(`/categoria/${id}${suffix}`), false,
+      `Canonical category ${id}${suffix} must skip Proxy`);
+  }
+  for (const variant of [id[0].toUpperCase() + id.slice(1), id.toUpperCase(), `${id}-extra`, `${id}/extra`]) {
+    for (const suffix of ["", "/"]) {
+      assert.equal(matchesProxy(`/categoria/${variant}${suffix}`), true,
+        `Invalid category ${variant}${suffix} must reach Proxy`);
+    }
+  }
+}
+for (const id of ["accesorios", "no-existe", "constructor", "toString", "__proto__"]) {
+  assert.equal(matchesProxy(`/categoria/${id}`), true);
+}
+for (const pathname of ["/", "/marca/fixture", "/el-proyecto", "/_next/static/chunk.js"]) {
+  assert.equal(matchesProxy(pathname), false);
+}
+console.log("PASS: Next matcher skips every canonical category (with slash/query), intercepts case variants and unknown IDs, and skips unrelated routes.");
 const categories = load("components/categories.tsx", { "lib/categories": categoryData });
 const page = load("app/categoria/[id]/page.tsx", {
   "lib/categories": categoryData,

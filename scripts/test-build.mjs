@@ -5,6 +5,9 @@ import { once } from "node:events";
 import { readFile, rm } from "node:fs/promises";
 import sharp from "sharp";
 import path from "node:path";
+import { createRequire } from "node:module";
+
+const { getMiddlewareRouteMatcher } = createRequire(import.meta.url)("next/dist/shared/lib/router/utils/middleware-route-matcher");
 
 const root = process.cwd();
 const logo = await sharp({ create: { width: 1200, height: 600, channels: 4, background: "#118877" } }).png().toBuffer();
@@ -50,6 +53,16 @@ try {
   assert.ok(imageRequests > 0);
   assert.equal(manifest.dynamicRoutes["/categoria/[id]"].fallback, false,
     "Unknown category paths must not be generated on demand");
+  const functionsManifest = JSON.parse(await readFile(".next/server/functions-config-manifest.json", "utf8"));
+  const proxyMatchers = functionsManifest.functions["/_middleware"].matchers;
+  assert.ok(proxyMatchers.length, "Build must emit the Proxy matcher");
+  const matchesProxy = getMiddlewareRouteMatcher(proxyMatchers);
+  for (const id of categories) {
+    for (const suffix of ["", "/"]) {
+      assert.equal(matchesProxy(`/categoria/${id}${suffix}`, { headers: {} }, {}), false,
+        "Compiled routing must skip Proxy for canonical categories, including a trailing slash");
+    }
+  }
 
   server = spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "--hostname", "127.0.0.1", "--port", "0"], {
     cwd: root, stdio: ["ignore", "pipe", "inherit"], env: { ...process.env,
@@ -72,10 +85,21 @@ try {
     const response = await fetch(`${origin}/categoria/${id}`);
     assert.equal(response.status, 200);
     assert.match(await response.text(), /Fixture brand/);
+    const trailingSlash = await fetch(`${origin}/categoria/${id}/`, { redirect: "manual" });
+    assert.equal(trailingSlash.status, 308);
+    assert.equal(new URL(trailingSlash.headers.get("location"), origin).pathname, `/categoria/${id}`);
   }
+  const prefetch = await fetch(`${origin}/categoria/ropa?_rsc=fixture`, {
+    headers: { RSC: "1", "Next-Router-Prefetch": "1" },
+  });
+  assert.equal(prefetch.status, 200);
+  assert.match(prefetch.headers.get("content-type"), /text\/x-component/);
+  await prefetch.text();
   const invalidCategories = ["accesorios", "no-existe", "constructor", "toString", "__proto__", "ropa-no-existe",
     ...categories.map((id) => id[0].toUpperCase() + id.slice(1)), ...categories.map((id) => id.toUpperCase())];
   for (const id of invalidCategories) {
+    assert.equal(matchesProxy(`/categoria/${id}`, { headers: {} }, {}), true,
+      `${id} must match the compiled Proxy rule`);
     const response = await fetch(`${origin}/categoria/${id}`);
     assert.equal(response.status, 404, `${id} must return HTTP 404`);
     const html = await response.text();
@@ -85,6 +109,7 @@ try {
   assert.equal(airtableRequests, beforeRequests,
     "Static valid pages and invalid categories must make zero runtime Airtable requests");
   console.log(`PASS: six static categories return HTTP 200; ${invalidCategories.length} invalid IDs (including case variants) return HTTP 404; zero runtime Airtable calls.`);
+  console.log("PASS: compiled matcher skips all canonical category paths and trailing slashes; slash redirects and RSC prefetch still work.");
   console.log("PASS: home, categories and brand detail still prerender with compact durable logos.");
 } finally {
   if (server && server.exitCode === null) {

@@ -14,5 +14,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/categoria/:path*",
+  // Keep canonical static pages out of Proxy, including a trailing slash.
+  // Next requires a literal matcher; test:categories checks it against CATEGORIES.
+  matcher: "/categoria/((?!(?:ropa|calzado|higiene|muebles|limpieza|peques)/?$).*)",
 };
