@@ -45,12 +45,10 @@ exact build request count across multiple brand pages, checks there is no timed
 ISR, and verifies successful pages and unknown URLs with the fixture API blocked
 after building. These checks do not consume real Airtable calls.
 
-The investigation branch `codex/bound-airtable-build-usage` has automatic Vercel
-deployments disabled in `vercel.json` while the October 2026 API quota is blocked.
-This does not disable production deployments from `main` or other branches.
-Remove that branch-specific entry when the quota is available and a real-data
-preview is needed; validate it before merging. The fixture build test also accepts
-`npm run test:build -- --turbopack` to exercise Vercel's production bundler.
+The fixture build test also accepts `npm run test:build -- --turbopack` to
+exercise Vercel's production bundler. Automatic preview and production builds
+use Vercel's default behavior. If Airtable blocks a build, the previous successful
+production deployment stays live; redeploy once API capacity is available.
 
 ## Compact, durable logos
 
