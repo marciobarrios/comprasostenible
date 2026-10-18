@@ -52,8 +52,8 @@ export async function createCatalogSnapshot({
 
   const brands = await list("Marcas", "default");
   if (!brands.length) throw new Error("The default brand view is empty; publish aborted.");
-  const slugs = brands.map(({ fields }) => fields.slug).filter(Boolean);
-  if (!slugs.length || slugs.some((slug) => typeof slug !== "string") || new Set(slugs).size !== slugs.length) {
+  const slugs = brands.map(({ fields }) => fields.slug);
+  if (slugs.some((slug) => typeof slug !== "string" || !slug.trim()) || new Set(slugs).size !== slugs.length) {
     throw new Error("Brand slugs must be nonempty and unique; publish aborted.");
   }
   const home = await list("Marcas", "home");

@@ -31,6 +31,19 @@ try {
   assert.deepEqual(data.home.map(({ fields }) => fields.slug), ["second", "first"]);
   assert.deepEqual(data.categories.ropa, [], "Empty category views must stay empty");
   assert.equal(saved.includes("fixture-only"), false, "Never persist credentials");
+  for (const slug of [undefined, null, "", "   ", 0, false]) {
+    let attempts = 0;
+    await assert.rejects(createCatalogSnapshot({ ...options, fetchImpl: async () => {
+      attempts++;
+      // JSON omits undefined fields, as Airtable does for blank cells.
+      return Response.json({ records: [brand("valid"), {
+        id: "rec-incomplete", fields: { name: "Incomplete brand", slug },
+      }] });
+    } }), /Brand slugs must be nonempty and unique/);
+    assert.equal(attempts, 1, "Reject incomplete brands before fetching other views");
+    assert.equal(await readFile(destination, "utf8"), saved,
+      "A valid brand must not hide an invalid slug or replace the complete snapshot");
+  }
   for (const status of [401, 403, 429, 500]) {
     let attempts = 0;
     await assert.rejects(createCatalogSnapshot({ ...options, fetchImpl: async () => {
