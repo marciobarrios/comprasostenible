@@ -54,10 +54,7 @@ const page = load("app/categoria/[id]/page.tsx", {
   "lib/cached-logo": { cachedLogoDataUri: async () => assert.fail("No fixture logos") },
   "next/navigation": { notFound: () => { throw new Error("NEXT_HTTP_ERROR_FALLBACK;404"); } },
   "lib/airtable": {
-    base: () => {
-      airtableCalls++;
-      return { select: ({ view }) => { views.push(view); return { all: async () => [] }; } };
-    },
+    getBrands: async (view) => { airtableCalls++; views.push(view); return []; },
   },
 });
 const params = (id) => ({ params: Promise.resolve({ id }) });

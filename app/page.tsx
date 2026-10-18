@@ -1,39 +1,10 @@
 import { BrandSummary } from "components/brand";
 import { Title } from "components/title";
 import { Categories } from "components/categories";
-import { base } from "lib/airtable";
-import { Brand } from "types";
-import { cachedLogoDataUri } from "lib/cached-logo";
-
-async function getBrands() {
-  try {
-    const records = await base("Marcas").select({ view: "home" }).all();
-    const brands = (await Promise.all(
-      records.map(async (record) => {
-        const fields = record.fields;
-        if (
-          fields.logo &&
-          Array.isArray(fields.logo) &&
-          fields.logo.length > 0
-        ) {
-          fields.logo[0].url = await cachedLogoDataUri(fields.logo[0].url);
-        }
-        return {
-          id: record.id,
-          fields: fields,
-        };
-      })
-    )) as unknown as Brand[];
-
-    return brands;
-  } catch (error) {
-    console.error("Error fetching brands:", error);
-    return [];
-  }
-}
+import { getBrands } from "lib/airtable";
 
 export default async function Home() {
-  const brands = await getBrands();
+  const brands = await getBrands("home");
 
   return (
     <>
