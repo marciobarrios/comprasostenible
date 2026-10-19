@@ -10,6 +10,7 @@
 
 # next.js
 /.next/
+/.catalog/
 /out/
 next-env.d.ts
 

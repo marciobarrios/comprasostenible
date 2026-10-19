@@ -4,6 +4,9 @@ import { HiOutlineHeart } from "react-icons/hi";
 import { Metadata, Viewport } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+// Catalogue content refreshes only on publish, never on a visit or timer.
+export const revalidate = false;
+
 export const metadata: Metadata = {
   title: "Marcas sostenibles ~ comprasostenible.co",
   description:
